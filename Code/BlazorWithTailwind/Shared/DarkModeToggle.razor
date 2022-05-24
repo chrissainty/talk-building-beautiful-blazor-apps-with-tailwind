@@ -1,0 +1,45 @@
+﻿@implements IAsyncDisposable
+@inject ILocalStorageService localStorage
+@inject IJSRuntime JS
+
+<div class="flex justify-end items-center space-x-2">
+    <span class="text-gray-800 dark:text-gray-500">Light</span>
+    <label for="toggle" class="w-9 h-5 flex items-center bg-gray-300 rounded-full p-1 cursor-pointer duration-300 ease-in-out dark:bg-gray-600">
+        <div class="w-4 h-4 rounded-full bg-white shadow-md transform duration-300 ease-in-out dark:translate-x-3"></div>
+    </label>
+    <span class="text-gray-400 dark:text-white">Dark</span>
+    <input id="toggle" type="checkbox" class="hidden" checked="@_darkMode" @onchange="ToggleTheme" />
+</div>
+
+@code {
+    private bool _darkMode;
+    private IJSObjectReference _themeModule = default!;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _themeModule = await JS.InvokeAsync<IJSObjectReference>("import", "./Shared/DarkModeToggle.razor.js");
+            var theme = await localStorage.GetItemAsStringAsync("theme");
+            _darkMode = theme == "dark" ? true : false;
+            await _themeModule.InvokeVoidAsync("setTheme", theme);
+        }
+    }
+
+    private async Task ToggleTheme(ChangeEventArgs args)
+    {
+        _darkMode = (bool)args.Value!;
+        var theme = _darkMode ? "dark" : "light";
+
+        await localStorage.SetItemAsStringAsync("theme", theme);
+        await _themeModule.InvokeVoidAsync("setTheme", theme);
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        if (_themeModule is not null)
+        {
+            await _themeModule.DisposeAsync();
+        }
+    }
+}

@@ -1,0 +1,18 @@
+﻿<header class="bg-white dark:bg-gray-700 px-10 py-4 shadow-lg flex items-center justify-between">
+    <div class="flex items-center">
+        <img src="Blazor.png" alt="blazor logo" />
+
+        <nav class="flex ml-10 font-semibold text-gray-600 dark:text-gray-300 text-lg">
+            <NavLink ActiveClass="text-purple-800 dark:text-purple-400" href="" Match="NavLinkMatch.All" class="mr-10 font-semibold">Home</NavLink>
+            <NavLink ActiveClass="text-purple-800 dark:text-purple-400" href="counter" class="mr-10 font-semibold">Counter</NavLink>
+            <NavLink ActiveClass="text-purple-800 dark:text-purple-400" href="fetchdata" class="font-semibold">Fetch data</NavLink>
+        </nav>
+    </div>
+    <div class="flex items-center">
+        <DarkModeToggle />
+        <a class="flex items-center ml-8 hover:text-purple-700 dark:hover:text-purple-400" href="https://docs.microsoft.com/aspnet/" target="_blank">
+            <svg class="h-5 stroke-current text-gray-500 dark:text-gray-400 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            About
+        </a>
+    </div>
+</header>

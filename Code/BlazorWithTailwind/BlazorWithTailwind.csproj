@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Blazored.LocalStorage" Version="4.1.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.0" PrivateAssets="all" />
+	</ItemGroup>
+
+	<Target Name="CheckForNpm" BeforeTargets="BuildCSS">
+		<Exec Command="npm -v" ContinueOnError="true">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+		</Exec>
+		<Error Condition="'$(ErrorCode)' != '0'" Text="You must install NPM to build this project" />
+	</Target>
+
+	<Target Name="BuildCSS" BeforeTargets="Compile">
+		<Exec EnvironmentVariables="NODE_ENV=production"
+			  Command="npx tailwindcss -i Styles/app.css -o wwwroot/css/app.css --minify"
+			  Condition=" '$(Configuration)' == 'Release' " />
+	</Target>
+
+</Project>

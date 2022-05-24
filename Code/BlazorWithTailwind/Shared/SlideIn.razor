@@ -1,0 +1,37 @@
+﻿@using System.Timers
+@implements IDisposable
+
+<div class="h-full transition duration-500 transform @_animationStyles">
+    @ChildContent
+</div>
+
+@code {
+    private Timer _timer = default!;
+    private string _animationStyles = "translate-x-full opacity-0";
+
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; } = default!;
+
+    protected override void OnInitialized()
+    {
+        _timer = new Timer(300) { AutoReset = false };
+        _timer.Elapsed += TriggerAnimation;
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _timer.Start();
+        }
+    }
+
+    private void TriggerAnimation(object? sender, ElapsedEventArgs e)
+    {
+        _animationStyles = "translate-x-0 opacity-100";
+        StateHasChanged();
+    }
+
+    void IDisposable.Dispose()
+        => _timer.Dispose();
+}
